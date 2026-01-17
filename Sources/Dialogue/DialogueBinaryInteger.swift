@@ -63,4 +63,17 @@ public extension BinaryInteger {
         
         return "\(hoursString):\(minutesString):\(secondsString)"
     }
+    
+    /// Returns the ordinal number of the integer.
+    var ordinal: String {
+        let str = self.description
+        let endDigit = self % 10
+        
+        switch endDigit {
+        case 1: return "\(str)st"
+        case 2: return "\(str)nd"
+        case 3: return "\(str)rd"
+        default: return "\(str)th"
+        }
+    }
 }
