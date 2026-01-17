@@ -69,6 +69,10 @@ public extension BinaryInteger {
         let str = self.description
         let endDigit = self % 10
         
+        guard !(11...13).contains(self % 100) else {
+            return "\(str)th"
+        }
+        
         switch endDigit {
         case 1: return "\(str)st"
         case 2: return "\(str)nd"
