@@ -109,6 +109,21 @@ print("\(onlineUsers) are online")
 // Returns "67 people are online"
 ```
 
+### ```sortedByLastName```
+Sorts an array of names in alphabetical order of last name.
+
+```swift
+let credits: [String] = [
+    "Robert De Niro",
+    "Joe Pesci",
+    "Ray Liotta",
+    "Frank Vincent"
+]
+
+print(credits.sortedByLastName)
+// ["Robert De Niro", "Ray Liotta", "Joe Pesci", "Frank Vincent"]
+```
+
 ### ```intoDate```
 Translates a string in any valid date format to a date.
 

@@ -136,3 +136,74 @@ public extension String {
         return nil
     }
 }
+
+fileprivate let lastNamePrefixes: [String] = [
+    // spanish/portuguese
+    "de", "del", "dos", "das",
+    // french
+    "du", "des", "le", "la",
+    // dutch/flemish
+    "van", "den", "der", "te", "ter", "ten",
+    // german
+    "von", "vom", "zu", "zum", "zur",
+    // italian
+    "di", "della", "degli", "delle", "da",
+    // arabic
+    "bin", "ibn", "bint",
+    // misc.
+    "af", "av", "ap"
+]
+
+fileprivate func extractLastName(from name: String) -> String {
+    let suffixes = ["Jr.", "Sr.", "II", "III", "IV", "V"]
+    let components = name.components(separatedBy: " ").filter { !$0.isEmpty }
+    
+    if components.count > 1 {
+        for i in (0..<components.count).reversed() {
+            if lastNamePrefixes.contains(components[i].lowercased()),
+               i + 1 < components.count {
+                return components[i] + " " + components[components.endIndex - 1]
+            }
+        }
+    }
+    
+    guard !components.isEmpty else { return "" }
+    
+    let lastWord = components.last ?? ""
+    let hasSuffix = suffixes.contains(lastWord)
+    
+    if hasSuffix && components.count > 2 {
+        return components[components.count - 2]
+            .replacingOccurrences(of: ",", with: "")
+    }
+    else {
+        return lastWord
+    }
+}
+
+public extension Array where Element == String {
+    /// Sorts an array of names in alphabetical order of last name.
+    ///
+    /// # Example
+    /// ```swift
+    /// let credits: [String] = [
+    ///     "Robert De Niro",
+    ///     "Joe Pesci",
+    ///     "Ray Liotta",
+    ///     "Frank Vincent"
+    /// ]
+    ///
+    /// print(credits.sortedByLastName)
+    /// // ["Robert De Niro", "Ray Liotta", "Joe Pesci", "Frank Vincent"]
+    /// ```
+    var sortedByLastName: [String] {
+        let sorted = self.sorted {
+            let lhs = extractLastName(from: $0.neutral)
+            let rhs = extractLastName(from: $1.neutral)
+            
+            return lhs < rhs
+        }
+        
+        return sorted
+    }
+}
