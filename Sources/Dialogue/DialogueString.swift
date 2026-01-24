@@ -6,7 +6,7 @@ public extension String {
     ///
     /// ## Example
     /// ```swift
-    /// var songNames = [
+    /// let songNames = [
     ///     "Zebra Pattern"
     ///     "The Best of the Best",
     ///     "Apple of My Eye",
@@ -51,8 +51,8 @@ public extension String {
     /// var pizzaCount: Int = 3
     /// var sandwichCount: Int = 4
     ///
-    /// var pizzas: String = "\(pizzaCount) pizza".plural(of: pizzaCount)
-    /// var sandwiches: String = "\(sandwichCount) sandwich".plural(of: sandwichCount, es: true)
+    /// let pizzas: String = "\(pizzaCount) pizza".plural(of: pizzaCount)
+    /// let sandwiches: String = "\(sandwichCount) sandwich".plural(of: sandwichCount, es: true)
     ///
     /// print("\(pizzas) and \(sandwiches) ordered")
     /// // Returns "3 pizzas and 4 sandwiches ordered"
@@ -61,7 +61,7 @@ public extension String {
     /// ```swift
     /// var userCount: Int = 67
     ///
-    /// var onlineUsers: String = "\(onlineUserCount) person".plural(of: userCount, unique: "people")
+    /// let onlineUsers: String = "\(onlineUserCount) person".plural(of: userCount, unique: "people")
     ///
     /// print("\(onlineUsers) are online")
     /// // Returns "67 people are online"
