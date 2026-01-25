@@ -27,3 +27,35 @@ public func clamp<T: Comparable>(
 ) -> T {
     return min(max(value(), floor), ceiling)
 }
+
+public extension Collection {
+    /// Conforms any collection into an `Array`.
+    ///
+    /// Designed for types that normally don't conform into easy collections,
+    /// such as `SubSequence` or `ArraySlice`.
+    ///
+    /// # Example
+    /// ```swift
+    /// @State private var infiniteScroll: Bool = false
+    ///
+    /// func filterItems(_ arr: [Item]) -> [Item] {
+    ///     return arr.filter { $0.in_stock == false }
+    /// }
+    ///
+    /// let allItems: [Item] = user.items
+    /// let firstPageItems: ArraySlice<Item> = allItems[0...9]
+    ///
+    /// var firstPageResults: [Item] {
+    ///     if infiniteScroll {
+    ///         return filterItems(allItems)
+    ///     }
+    ///     else {
+    ///         return filterItems(firstPageItems.array)
+    ///         // No type mismatch, returns as [Item]
+    ///     }
+    /// }
+    /// ```
+    var array: [Element] {
+        return Array(self)
+    }
+}

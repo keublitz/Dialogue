@@ -47,6 +47,35 @@ print(time.hhmmss()) // Returns "9:41"
 print(time.hhmmss(dynamic: false)) // Returns "00:09:41"
 ```
 
+## ```Collection```
+
+### ```array```
+
+Conforms any collection into an `Array`.
+
+Designed for variables that conform to more rigid types, such as `SubSequence` or `ArraySlice`.
+
+```swift
+@State private var infiniteScroll: Bool = false
+
+func filterItems(_ arr: [Item]) -> [Item] {
+    return arr.filter { $0.in_stock == false }
+}
+
+let allItems: [Item] = user.items
+let firstPageItems: ArraySlice<Item> = allItems[0...9]
+
+var firstPageResults: [Item] {
+    if infiniteScroll {
+        return filterItems(allItems)
+    }
+    else {
+        return filterItems(firstPageItems.array)
+        // No type mismatch, returns as [Item]
+    }
+}
+```
+
 ## ```Color```
 
 ### ```hex```
