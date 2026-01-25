@@ -1,6 +1,6 @@
 # Dialogue
 
-A collection of SwiftUI macros, designed for organizing and reformatting data without sacrificing legibility.
+A collection of SwiftUI extensions, designed for organizing and reformatting data without sacrificing legibility.
 
 <p>
   <a href="https://swift.org/"><img src="https://img.shields.io/badge/Swift-6.2-orange.svg" alt="Swift 6.2"></a>
