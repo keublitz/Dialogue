@@ -27,6 +27,7 @@ public extension String {
                 return String(self.dropFirst(article.count))
                     .folding(options: .diacriticInsensitive, locale: .current)
                     .lowercased()
+                    .replacingOccurrences(of: "’", with: "'")
                     .replacingOccurrences(of: "\"", with: "")
                     .replacingOccurrences(of: "\'", with: "")
             }
@@ -35,6 +36,7 @@ public extension String {
         return self
             .folding(options: .diacriticInsensitive, locale: .current)
             .lowercased()
+            .replacingOccurrences(of: "’", with: "'")
             .replacingOccurrences(of: "\"", with: "")
             .replacingOccurrences(of: "\'", with: "")
     }
