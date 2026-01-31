@@ -282,7 +282,7 @@ public extension String {
     ///
     /// key.load(into: allItems) { error in print(error) }
     /// ```
-    func load<T: Decodable>(into data: inout T, _ throwing: (Error) -> Void) {
+    func load<T: Decodable>(_ data: inout T, _ throwing: (Error) -> Void) {
         do {
             if let userDefault = UserDefaults.standard.data(forKey: self) {
                 let decoded = try JSONDecoder().decode(T.self, from: userDefault)
@@ -303,7 +303,7 @@ public extension String {
     ///
     /// try key.load(into: allItems)
     /// ```
-    func load<T: Decodable>(into data: inout T) throws {
+    func load<T: Decodable>(_ data: inout T) throws {
         if let userDefault = UserDefaults.standard.data(forKey: self) {
             let decoded = try JSONDecoder().decode(T.self, from: userDefault)
             data = decoded
