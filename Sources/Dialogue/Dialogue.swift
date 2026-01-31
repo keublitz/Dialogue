@@ -67,7 +67,7 @@ public extension Collection {
 // ## Codable
 
 public extension Encodable {
-    /// Saves an encodable object to a URL, with built-in error throwing.
+    /// Saves an encodable object to a URL. Supports "soft-throwing" errors.
     ///
     /// ## Example
     ///
@@ -114,7 +114,7 @@ public extension Encodable {
         try encoded.write(to: url)
     }
     
-    /// Saves an encodable object as a value of a UserDefaults key, with built-in error throwing.
+    /// Saves an encodable object as a value of a UserDefaults key. Supports "soft-throwing" errors.
     ///
     /// ## Example
     ///
@@ -154,7 +154,40 @@ func test(_ url: URL) throws -> String? {
 }
 
 public extension URL {
-    /// Decode data from a URL, with built-in error throwing.
+    /// Saves data to the URL. Supports "soft-throwing" errors.
+    ///
+    /// ## Example
+    /// ```swift
+    /// @Published var items: [Item] = []
+    /// private let itemsURL: URL
+    ///
+    /// itemsURL.save(items) { error in print(error) }
+    /// ```
+    func save<T: Encodable>(_ data: T, _ throwing: (Error) -> Void) {
+        do {
+            let encoded = try JSONEncoder().encode(data)
+            try encoded.write(to: self)
+        }
+        catch {
+            throwing(error)
+        }
+    }
+    
+    /// Saves data to the URL.
+    ///
+    /// ## Example
+    /// ```swift
+    /// @Published var items: [Item] = []
+    /// private let itemsURL: URL
+    ///
+    /// try itemsURL.save(items)
+    /// ```
+    func save<T: Encodable>(_ data: T) throws {
+        let encoded = try JSONEncoder().encode(data)
+        try encoded.write(to: self)
+    }
+    
+    /// Decodes data from a URL. Supports "soft-throwing" errors.
     ///
     /// ## Example
     /// ```swift
@@ -176,7 +209,7 @@ public extension URL {
         }
     }
     
-    /// Decode data from a URL.
+    /// Decodes data from a URL.
     ///
     /// ## Example
     /// ```swift
@@ -192,7 +225,55 @@ public extension URL {
 }
 
 public extension String {
-    /// Decode data from a UserDefaults key into a desired output, with built-in error throwing.
+    /// Saves data to the UserDefaults key. Supports "soft-throwing" errors.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let key: String = "itemData"
+    ///
+    /// // Instead of this...
+    /// do {
+    ///     let encoded = try JSONEncoder().encode(data)
+    ///     UserDefaults.standard.set(encoded, forKey: key)
+    /// }
+    /// catch {
+    ///     print(error)
+    /// }
+    ///
+    /// // ...do this!
+    /// key.save(data) { error in print(error) }
+    /// ```
+    func save<T: Encodable>(_ data: T, _ throwing: (Error) -> Void) {
+        do {
+            let encoded = try JSONEncoder().encode(data)
+            UserDefaults.standard.set(encoded, forKey: self)
+        }
+        catch {
+            throwing(error)
+        }
+    }
+    
+    /// Saves data to the UserDefaults key.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let key: String = "itemData"
+    ///
+    /// // Instead of this...
+    /// let encoded = try JSONEncoder().encode(data)
+    /// UserDefaults.standard.set(encoded, forKey: key)
+    ///
+    /// // ...do this!
+    /// try key.save(data)
+    /// ```
+    func save<T: Encodable>(_ data: T) throws {
+        let encoded = try JSONEncoder().encode(data)
+        UserDefaults.standard.set(encoded, forKey: self)
+    }
+    
+    /// Decodes data from a UserDefaults key into a desired output. Supports "soft-throwing" errors.
     ///
     /// ## Example
     /// ```swift
@@ -213,7 +294,7 @@ public extension String {
         }
     }
     
-    /// Decode data from a UserDefaults key into a desired output.
+    /// Decodes data from a UserDefaults key into a desired output.
     ///
     /// ## Example
     /// ```swift
@@ -231,7 +312,7 @@ public extension String {
 }
 
 public extension Data {
-    /// Decodes data into a desired type, with built-in error throwing.
+    /// Decodes data into a desired type. Supports "soft-throwing" errors.
     ///
     /// ## Example
     /// ```swift

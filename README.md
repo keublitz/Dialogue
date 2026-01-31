@@ -183,6 +183,18 @@ UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
 try allItems.save(toUserDefaultsKey: "items")
 ```
 
+```save()``` can also be used directly on ```URL```s and ```UserDefault``` keys.
+
+```swift
+@Published var items: [Item] = // ...
+
+private let itemsURL: URL
+itemsURL.save(items)
+
+private let key: String = "itemsData"
+key.save(items)
+```
+
 ### ```load()```
 
 Loads ```Decodable``` types from a ```URL```, ```String``` key, or directly from ```Data```.
