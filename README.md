@@ -6,6 +6,7 @@ A collection of SwiftUI extensions, designed for organizing and reformatting dat
   <a href="https://swift.org/"><img src="https://img.shields.io/badge/Swift-6.2-orange.svg" alt="Swift 6.2"></a>
   <a href=""><img src="https://img.shields.io/badge/iOS-14.0-blue.svg" alt="iOS 14.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT"></a>
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/keublitz/Dialogue">
 </p>
 
 ---
