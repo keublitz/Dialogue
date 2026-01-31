@@ -145,6 +145,93 @@ Crops an image from a given direction.
 
 ## Protocols
 
+## ```Codable```
+
+### ```save()```
+
+Saves ```Encodable``` types into a ```URL``` or a ```UserDefaults``` key-value pair.
+
+The ```save()``` function takes encoding and writing operations such as this:
+```swift
+@Published var allItems: [Item] = // ...
+private let itemsURL: URL
+
+do {
+    let data = try JSONEncoder().encode(allItems)
+    try data.write(to: itemsURL)
+}
+catch {
+    print(error)
+}
+```
+
+...and executes them in a single line:
+
+```swift
+try allItems.save(toURL: itemsURL)
+```
+
+Works identically for ```UserDefaults``` keys, so instead of this:
+
+```swift
+let encoded = try JSONEncoder().encode(allItems)
+UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
+```
+
+...just do this!
+```swift
+try allItems.save(toUserDefaultsKey: "items")
+```
+
+### ```load()```
+
+Loads ```Decodable``` types from a ```URL```, ```String``` key, or directly from ```Data```.
+
+```swift
+// Instead of doing this to decode a ```URL```...
+@Published var allItems: [Item] = // ...
+private let itemsURL: URL
+
+do {
+    let data = try Data(contentsOf: itemsURL)
+    try JSONDecoder().decode([Item].self, from: data)
+}
+catch {
+    print(error)
+}
+
+/// ...simply do this!
+try itemsURL.load([Item].self)
+```
+
+Same goes for ```String``` and ```Data```:
+```swift
+// Instead of this...
+if let userDefaults = UserDefaults.standard.data(forKey: "items") {
+    let decoded = try JSONDecoder().decode([Item].self, from: userDefault)
+    allItems = decoded
+}
+
+// ...do this!
+try "items".load(into: allItems)
+```
+
+```swift
+let data = try Data(contentsOf: itemsURL)
+
+/// Instead of this...
+let decoded = try JSONDecoder().decode([Item].self, from: data)
+return decoded
+
+/// ...do this!
+try data.load([Item].self)
+```
+
+> NOTE: Each save and load function has a "soft-throw" variation for instances where normal ```throws``` would be inconvienent.
+```swift
+item.save(toURL: itemURL) { error in print(error) }
+```
+
 ## ```Collection```
 
 ### ```array```
