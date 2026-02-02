@@ -32,8 +32,8 @@ public func clamp<T: Comparable>(
 
 // ## Collection
 
-public extension Collection {
-    /// Conforms any collection into an `Array`.
+public extension Sequence {
+    /// Conforms any sequence into an `Array`.
     ///
     /// Designed for types that normally don't conform into easy collections,
     /// such as `SubSequence` or `ArraySlice`.
@@ -280,13 +280,16 @@ public extension String {
     /// @Published var allItems: [Item] = // ...
     /// private let key: String = "items"
     ///
-    /// key.load(into: allItems) { error in print(error) }
+    /// key.load(&allItems) { error in print(error) }
     /// ```
-    func load<T: Decodable>(_ data: inout T, _ throwing: (Error) -> Void) {
+    func load<T: Decodable>(_ data: inout T, ifNoKeyFound: ((inout T) -> Void)? = nil, _ throwing: (Error) -> Void) {
         do {
             if let userDefault = UserDefaults.standard.data(forKey: self) {
                 let decoded = try JSONDecoder().decode(T.self, from: userDefault)
                 data = decoded
+            }
+            else {
+                ifNoKeyFound?(&data)
             }
         }
         catch {
@@ -301,12 +304,21 @@ public extension String {
     /// @Published var allItems: [Item] = // ...
     /// private let key: String = "items"
     ///
-    /// try key.load(into: allItems)
+    /// try key.load(&allItems)
+    ///
+    /// // With decode fail fallback
+    /// try key.load(&allItems, ifNoKeyFound: { data in
+    ///     data = []
+    ///     print("Could not load data, loading default")
+    /// })
     /// ```
-    func load<T: Decodable>(_ data: inout T) throws {
+    func load<T: Decodable>(_ data: inout T, ifNoKeyFound: ((inout T) -> Void)? = nil) throws {
         if let userDefault = UserDefaults.standard.data(forKey: self) {
             let decoded = try JSONDecoder().decode(T.self, from: userDefault)
             data = decoded
+        }
+        else {
+            ifNoKeyFound?(&data)
         }
     }
 }
