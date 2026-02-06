@@ -149,10 +149,6 @@ public extension Encodable {
     }
 }
 
-func test(_ url: URL) throws -> String? {
-    url.load(String.self) { error in }
-}
-
 public extension URL {
     /// Saves data to the URL. Supports "soft-throwing" errors.
     ///
