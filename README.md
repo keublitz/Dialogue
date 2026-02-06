@@ -142,6 +142,37 @@ Adds a pixelated filter to an image.
 ### ```crop(from:_:)```
 Crops an image from a given direction.
 
+## ```View```
+
+### ```ifEmpty(_:)```
+Changes a view if a given array is empty. Modify with just a ```false``` value to return an ```EmptyView()```.
+
+```swift
+@State private var items: [Item] = 5
+
+var body: some View {
+    List {
+        Section {
+            ForEach(items) { item in
+                Text(item.name)
+            }
+        }
+        .ifEmpty(items) { Text("No items found.") }
+    }
+}
+```
+
+To hide the view altogether, just return the function without a closure type.
+
+```swift
+Section {
+    ForEach(items) { item in 
+        Text(item.name)
+    }
+}
+.ifEmpty(items)
+```
+
 ---
 
 ## Protocols
