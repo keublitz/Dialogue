@@ -145,7 +145,7 @@ Crops an image from a given direction.
 ## ```View```
 
 ### ```ifEmpty(_:)```
-Changes a view if a given array is empty. Modify with just a ```false``` value to return an ```EmptyView()```.
+Changes a view if a given array is empty.
 
 ```swift
 @State private var items: [Item] = 5
