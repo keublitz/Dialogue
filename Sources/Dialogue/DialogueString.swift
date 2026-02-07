@@ -20,7 +20,7 @@ public extension String {
     var neutral: String {
         let lowerCasedTitle = self.lowercased()
         
-        let articles = ["a ", "an ", "the ", "i "]
+        let articles = ["a ", "an ", "the "]
         
         for article in articles {
             if lowerCasedTitle.hasPrefix(article) {
