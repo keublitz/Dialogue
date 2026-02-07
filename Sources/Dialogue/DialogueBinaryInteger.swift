@@ -81,3 +81,11 @@ public extension BinaryInteger {
         }
     }
 }
+
+internal extension Int {
+    var word: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .spellOut
+        return formatter.string(from: NSNumber(value: self)) ?? ""
+    }
+}
