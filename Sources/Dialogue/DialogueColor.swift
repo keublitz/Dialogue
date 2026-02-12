@@ -50,6 +50,7 @@ public extension Color {
 
 fileprivate typealias ColorValues = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 
+// Gets the red, green, blue and alpha values from a NativeColor.
 fileprivate func getValues(of color: NativeColor) -> ColorValues {
     var rgba: ColorValues = (0,0,0,0)
     
@@ -58,6 +59,7 @@ fileprivate func getValues(of color: NativeColor) -> ColorValues {
     return rgba
 }
 
+// Returns true if euclidean distance of two colors surpass a given threshold.
 fileprivate func visibleDifference(
     _ lhs: ColorValues,
     _ rhs: ColorValues,
@@ -75,6 +77,12 @@ fileprivate func visibleDifference(
     return similarity >= threshold
 }
 
+/// Returns `true` if the range of two colors exceeds a given threshold.
+///
+/// ## Parameters:
+/// - `of`: The threshold the range must exceed, expressed as a percentage. Defaults to 0.4 (40%).
+/// - `x`: The starting color.
+/// - `y`: The ending color.
 public func gradientHasWideRange(
     of threshold: CGFloat = 0.4,
     _ x: Color,
@@ -93,6 +101,21 @@ public func gradientHasWideRange(
     return false
 }
 
+/// Returns a color from the middle of a gradient.
+///
+/// ## Parameters:
+/// - `percent`: The distance within the gradient to pull the color from,
+/// expressed as a percentage. Defaults to 0.5.
+/// - `from`: The starting color.
+/// - `to`: The ending color.
+///
+/// ## Example:
+/// ```swift
+/// let middle = middleColor(from: .red, to: .yellow)
+///
+/// Text("This is the middle color.")
+///     .foregroundStyle(middle) // Returns orange
+/// ```
 public func middleColor(
     percent origin: Double = 0.5,
     from x: Color,
