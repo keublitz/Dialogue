@@ -51,26 +51,28 @@ public extension Color {
 fileprivate typealias ColorValues = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 
 fileprivate func getValues(of color: NativeColor) -> ColorValues {
-    var xyz: ColorValues = (0,0,0,0)
+    var rgba: ColorValues = (0,0,0,0)
     
-    color.getRed(&xyz.red, green: &xyz.green, blue: &xyz.blue, alpha: &xyz.alpha)
+    color.getRed(&rgba.red, green: &rgba.green, blue: &rgba.blue, alpha: &rgba.alpha)
     
-    return xyz
+    return rgba
 }
 
 fileprivate func visibleDifference(
     _ lhs: ColorValues,
     _ rhs: ColorValues,
-    threshold: CGFloat = 0.4
+    threshold: CGFloat
 ) -> Bool {
-    let redDiff = abs(lhs.red - rhs.red)
-    let bluDiff = abs(lhs.blue - rhs.blue)
-    let grnDiff = abs(lhs.green - rhs.green)
+    let distance: CGFloat = sqrt(
+        pow(lhs.red - rhs.red, 2) +
+        pow(lhs.green - rhs.green, 2) +
+        pow(lhs.blue - rhs.blue, 2)
+    )
     
-    if redDiff > threshold || bluDiff > threshold || grnDiff > threshold {
-        return true
-    }
-    return false
+    let maxDistance: CGFloat = sqrt(3 * pow(255,2))
+    let similarity: CGFloat = 1 - (distance / maxDistance)
+    
+    return similarity >= threshold
 }
 
 public func gradientHasWideRange(
