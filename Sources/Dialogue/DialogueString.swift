@@ -20,27 +20,14 @@ public extension String {
     /// // Returns ["Apple of My Eye", "The Best of the Best", "8 Years Ago", "Èl Camino", "untitled", "Zebra Pattern"]
     /// ```
     var neutral: String {
-        let lowerCasedTitle = self.lowercased()
-        
-        let articles = ["a ", "an ", "the "]
-        
-        for article in articles {
-            if lowerCasedTitle.hasPrefix(article) {
-                return String(self.dropFirst(article.count))
-                    .neutralModifiers
-            }
-        }
-        
-        return self.neutralModifiers
+        return self.neutralModifiers()
     }
     
     /// Outputs a non-diacritic, lowercased, article-less version of the string.
     ///
     /// ## Parameters
     /// - `keepArticles`: When `true`, articles will not be removed from the string.
-    ///
-    /// ## Discussion
-    /// In addition to neutralizing letter differences, all instances of numbers within the string are converted into their word equivalent.
+    /// - `alphabetizeNumerals`: When `true`, numerals will be changed into their word form.
     ///
     /// ## Example
     /// ```swift
@@ -56,37 +43,55 @@ public extension String {
     /// print(songNames.sorted{ $0.neutral < $1.neutral })
     /// // Returns ["Apple of My Eye", "The Best of the Best", "8 Years Ago", "Èl Camino", "untitled", "Zebra Pattern"]
     /// ```
-    func neutral(keepArticles: Bool = false) -> String {
-        if keepArticles {
-            return self.neutralModifiers
-        }
-        else {
-            return self.neutral
-        }
+    func neutral(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
+        return self.neutralModifiers(keepArticles: keepArticles, alphabetizeNumerals: alphabetizeNumerals)
     }
     
-    private var neutralModifiers: String {
-        let neutralized = self
+    private var articlesDropped: String {
+        let lowerCasedTitle = self.lowercased()
+        
+        let articles = ["a ", "an ", "the "]
+        
+        for article in articles {
+            if lowerCasedTitle.hasPrefix(article) {
+                return String(self.dropFirst(article.count))
+            }
+        }
+        
+        return self
+    }
+    
+    private func neutralModifiers(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
+        var str = self
+        
+        if !keepArticles {
+            str = str.articlesDropped
+        }
+        
+        str = str
             .folding(options: .diacriticInsensitive, locale: .current)
             .lowercased()
             .replacingOccurrences(of: "’", with: "'")
             .replacingOccurrences(of: "\"", with: "")
             .replacingOccurrences(of: "\'", with: "")
+            
+        let mutStr = NSMutableString(string: str)
         
-        let mutableString = NSMutableString(string: neutralized)
-        let pattern = #"\d+"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else { return neutralized }
-        
-        let matches = regex.matches(in: neutralized, range: NSRange(location: 0, length: neutralized.utf16.count))
-        
-        for match in matches.reversed() {
-            let matchString = (neutralized as NSString).substring(with: match.range)
-            if let number = Int(matchString) {
-                mutableString.replaceCharacters(in: match.range, with: number.word)
+        if alphabetizeNumerals {
+            let pattern = #"\d+"#
+            guard let regex = try? NSRegularExpression(pattern: pattern) else { return str }
+            
+            let matches = regex.matches(in: str, range: NSRange(location: 0, length: str.utf16.count))
+            
+            for match in matches.reversed() {
+                let matchString = (str as NSString).substring(with: match.range)
+                if let number = Int(matchString) {
+                    mutStr.replaceCharacters(in: match.range, with: number.word)
+                }
             }
         }
         
-        return mutableString as String
+        return mutStr as String
     }
     
     /// Pluralizes text based on an integer value.
