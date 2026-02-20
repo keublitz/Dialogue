@@ -60,11 +60,14 @@ public extension UIColor {
     /// print(hex) // Returns "#A020F0FF"
     /// ```
     var hex: String {
-        guard let components = self.cgColor.components, components.count >= 4 else { return "#000000" }
+        guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB),
+              let rgbaColor = self.cgColor.converted(to: colorSpace, intent: .defaultIntent, options: nil),
+              let components = rgbaColor.components,
+              components.count >= 4 else { return "#000000" }
         
         let r = Int((components[0]) * 255.0)
-        let b = Int((components[1]) * 255.0)
-        let g = Int((components[2]) * 255.0)
+        let g = Int((components[1]) * 255.0)
+        let b = Int((components[2]) * 255.0)
         let a = Int((components[3]) * 255.0)
         
         return String(format: "#%02X%02X%02X%02X", r, g, b, a)
