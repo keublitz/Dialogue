@@ -14,11 +14,12 @@ public extension Color {
     var hex: String {
         guard let components = NativeColor(self).cgColor.components else { return "#000000" }
         
-        let r = Int((components[0]) * 255.0)
-        let g = Int((components[1]) * 255.0)
-        let b = Int((components[2]) * 255.0)
+        let r = Int((components[0] * 255.0).rounded()) & 0xFF
+        let g = Int((components[1] * 255.0).rounded()) & 0xFF
+        let b = Int((components[2] * 255.0).rounded()) & 0xFF
+        let a = Int((components[3] * 255.0).rounded()) & 0xFF
         
-        return String(format: "#%02X%02X%02X", r, g, b)
+        return String(format: "#%02X%02X%02X%02X", r, g, b, a)
     }
     
     /// Returns the color of a hexadecimal value.
@@ -45,6 +46,82 @@ public extension Color {
         let b = Double(rgb & 0xFF) / 255.0
         
         self.init(red: r, green: g, blue: b)
+    }
+}
+
+public extension UIColor {
+    /// Returns the hexadecimal value of a color.
+    ///
+    /// ## Example:
+    /// ```swift
+    /// var purple: UIColor = .purple
+    /// let hex = purple.hex
+    ///
+    /// print(hex) // Returns "#A020F0FF"
+    /// ```
+    var hex: String {
+        guard let components = self.cgColor.components, components.count >= 4 else { return "#000000" }
+        
+        let r = Int((components[0]) * 255.0)
+        let b = Int((components[1]) * 255.0)
+        let g = Int((components[2]) * 255.0)
+        let a = Int((components[3]) * 255.0)
+        
+        return String(format: "#%02X%02X%02X%02X", r, g, b, a)
+    }
+    
+    /// Returns the color of a hexadecimal value.
+    ///
+    /// > Note: This always returns as an optional.
+    ///
+    /// ## Example:
+    /// ```swift
+    /// let purpleHex: String = "#A020F0FF"
+    /// let purple = UIColor(hex: purpleHex) ?? .clear
+    ///
+    /// Text("Grape juice")
+    ///     .foregroundStyle(purple)
+    /// ```
+    convenience init?(hex: String, alpha: CGFloat = 1.0) {
+        var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        formattedHex = formattedHex.replacingOccurrences(of: "#", with: "")
+        
+        var rgb: UInt64 = 0
+        guard Scanner(string: formattedHex).scanHexInt64(&rgb) else { return nil }
+        
+        if formattedHex.count == 8 {
+            let r = CGFloat((rgb >> 24) & 0xFF) / 255.0
+            let g = CGFloat((rgb >> 16) & 0xFF) / 255.0
+            let b = CGFloat((rgb >> 8) & 0xFF) / 255.0
+            let a = CGFloat(rgb & 0xFF) / 255.0
+            
+            self.init(red: r, green: g, blue: b, alpha: a)
+        }
+        else {
+            let r = CGFloat((rgb >> 16) & 0xFF) / 255.0
+            let g = CGFloat((rgb >> 8) & 0xFF) / 255.0
+            let b = CGFloat(rgb & 0xFF) / 255.0
+            
+            self.init(red: r, green: g, blue: b, alpha: alpha)
+        }
+    }
+    
+    /// Returns the SwiftUI equivalent of the color.
+    var color: Color {
+        var rVal: CGFloat = 0
+        var bVal: CGFloat = 0
+        var gVal: CGFloat = 0
+        var aVal: CGFloat = 0
+        
+        guard getRed(&rVal, green: &gVal, blue: &bVal, alpha: &aVal) else {
+            return .clear
+        }
+        
+        return Color(
+            red: rVal,
+            green: gVal,
+            blue: bVal)
+        .opacity(aVal)
     }
 }
 
