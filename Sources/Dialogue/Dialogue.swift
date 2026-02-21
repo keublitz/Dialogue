@@ -88,7 +88,6 @@ public extension Encodable {
     /// allItems.save(toURL: itemsURL) { error in print(error) }
     ///
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func save(toURL url: URL, _ throwing: (Error) -> Void) {
         do {
             let encoded = try JSONEncoder().encode(self)
@@ -125,7 +124,6 @@ public extension Encodable {
     /// allItems.save(toUserDefaultsKey: "items") { error in print(error) }
     ///
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func save(toUserDefaultsKey userDefaultsKey: String, _ throwing: (Error) -> Void) {
         do {
             let encoded = try JSONEncoder().encode(self)
@@ -161,7 +159,6 @@ public extension URL {
     ///
     /// itemsURL.save(items) { error in print(error) }
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func save<T: Encodable>(_ data: T, _ throwing: (Error) -> Void) {
         do {
             let encoded = try JSONEncoder().encode(data)
@@ -197,7 +194,6 @@ public extension URL {
     ///     itemURL.load(Item.self) { error in print(error) }
     /// }
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func load<T: Decodable>(_: T.Type, _ throwing: (Error) -> Void) -> T? {
         do {
             let data = try Data(contentsOf: self)
@@ -244,7 +240,6 @@ public extension String {
     /// // ...do this!
     /// key.save(data) { error in print(error) }
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func save<T: Encodable>(_ data: T, _ throwing: (Error) -> Void) {
         do {
             let encoded = try JSONEncoder().encode(data)
@@ -283,7 +278,6 @@ public extension String {
     ///
     /// key.load(&allItems) { error in print(error) }
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func load<T: Decodable>(_ data: inout T, ifNoKeyFound: ((inout T) -> Void)? = nil, _ throwing: (Error) -> Void) {
         do {
             if let userDefault = UserDefaults.standard.data(forKey: self) {
@@ -338,7 +332,6 @@ public extension Data {
     /// }
     ///
     /// ```
-    @available(*, deprecated, message: "Use throwable variant instead.")
     func load<T: Decodable>(_: T.Type, _ throwing: (Error) -> Void) -> T? {
         do {
             let decoded = try JSONDecoder().decode(T.self, from: self)
