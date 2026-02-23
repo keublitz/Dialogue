@@ -278,14 +278,16 @@ public extension String {
     ///
     /// key.load(&allItems) { error in print(error) }
     /// ```
-    func load<T: Decodable>(_ data: inout T, ifNoKeyFound: ((inout T) -> Void)? = nil, _ throwing: (Error) -> Void) {
+    func load<T: Decodable>(_ data: inout T, _ throwing: (Error) -> Void) {
         do {
             if let userDefault = UserDefaults.standard.data(forKey: self) {
                 let decoded = try JSONDecoder().decode(T.self, from: userDefault)
                 data = decoded
             }
             else {
-                ifNoKeyFound?(&data)
+#if DEBUG
+                debugPrint("ERROR with UserDefaults data in \(#function): could not obtain data from key \(self)")
+#endif
             }
         }
         catch {
@@ -308,13 +310,63 @@ public extension String {
     ///     print("Could not load data, loading default")
     /// })
     /// ```
-    func load<T: Decodable>(_ data: inout T, ifNoKeyFound: ((inout T) -> Void)? = nil) throws {
+    func load<T: Decodable>(_ data: inout T) throws {
         if let userDefault = UserDefaults.standard.data(forKey: self) {
             let decoded = try JSONDecoder().decode(T.self, from: userDefault)
             data = decoded
         }
         else {
-            ifNoKeyFound?(&data)
+#if DEBUG
+            debugPrint("ERROR with UserDefaults data in \(#function): could not obtain data from key \(self)")
+#endif
+        }
+    }
+    
+    /// Decodes data from a UserDefaults key as a desired type.
+    ///
+    /// ## Example
+    /// ```swift
+    /// @Published var allItems: [Item] = // ...
+    /// private let key: String = "items"
+    ///
+    /// allItems = try key.load([Item].self)
+    /// ```
+    func load<T: Decodable>(_: T.Type) throws -> T? {
+        guard let data = UserDefaults.standard.data(forKey: self) else {
+#if DEBUG
+            debugPrint("ERROR with UserDefaults data in \(#function): could not obtain data from key \(self)")
+#endif
+            return nil
+        }
+        
+        let decoded = try JSONDecoder().decode(T.self, from: data)
+        return decoded
+    }
+    
+    /// Decodes data from a UserDefaults key as a desired type. Supports "soft-throwing" errors.
+    ///
+    /// ## Example
+    /// ```swift
+    /// @Published var allItems: [Item] = // ...
+    /// private let key: String = "items"
+    ///
+    /// allItems = key.load([Item].self) { error in print(error) }
+    /// ```
+    func load<T: Decodable>(_: T.Type, _ throwing: (Error) -> Void) -> T? {
+        guard let data = UserDefaults.standard.data(forKey: self) else {
+#if DEBUG
+            debugPrint("ERROR with UserDefaults data in \(#function): could not obtain data from key \(self)")
+#endif
+            return nil
+        }
+        
+        do {
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return decoded
+        }
+        catch {
+            throwing(error)
+            return nil
         }
     }
 }
