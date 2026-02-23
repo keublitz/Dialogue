@@ -48,6 +48,16 @@ print(time.hhmmss()) // Returns "9:41"
 print(time.hhmmss(dynamic: false)) // Returns "00:09:41"
 ```
 
+### ```shorten(by:)```
+Shortens the decimal points of a floating value.
+
+```swift
+var longFilesize: Double = 265.452340679
+let filesize: String = longFilesize.shorten()
+
+print(filesize) // Returns "265.45"
+```
+
 ## ```Color```
 
 ### ```hex```

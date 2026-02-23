@@ -63,4 +63,20 @@ public extension BinaryFloatingPoint {
         
         return "\(hoursString):\(minutesString):\(secondsString)"
     }
+    
+    /// Shortens the decimal points of a floating value.
+    ///
+    /// ## Example:
+    /// ```swift
+    /// var longFilesize: Double = 265.452340679
+    /// let filesize: String = longFilesize.shorten()
+    ///
+    /// print(filesize) // Returns "265.45"
+    /// ```
+    func shorten(by maximumFractionDigits: Int = 2) -> String {
+        let formatter = NumberFormatter()
+        formatter.minimumIntegerDigits = 1
+        formatter.maximumFractionDigits = maximumFractionDigits
+        return formatter.string(from: NSNumber(value: Double(self))) ?? "\(self)"
+    }
 }
