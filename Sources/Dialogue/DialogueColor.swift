@@ -12,7 +12,10 @@ public extension Color {
     /// print(hex) // Returns "#A020F0"
     /// ```
     var hex: String {
-        guard let components = NativeColor(self).cgColor.components else { return "#000000" }
+        guard let components = NativeColor(self).cgColor.components else {
+            assertionFailure("Color has no components — unexpected color space.")
+            return "#000000"
+        }
         
         let r = Int((components[0] * 255.0).rounded()) & 0xFF
         let g = Int((components[1] * 255.0).rounded()) & 0xFF
@@ -73,7 +76,10 @@ public extension UIColor {
         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB),
               let rgbaColor = self.cgColor.converted(to: colorSpace, intent: .defaultIntent, options: nil),
               let components = rgbaColor.components,
-              components.count >= 4 else { return "#000000" }
+              components.count >= 4 else {
+            assertionFailure("Color has no components — unexpected color space.")
+            return "#000000"
+        }
         
         let r = Int((components[0]) * 255.0)
         let g = Int((components[1]) * 255.0)
