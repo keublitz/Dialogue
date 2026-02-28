@@ -8,8 +8,8 @@ public extension Array {
     /// ```swift
     /// let array: [Int] = [1, 2, 3, 4, 5, 6]
     ///
-    /// print(array.chunked(into: 2)) // Returns [[1, 2, 3], [4, 5, 6]]
-    /// print(array.chunked(into: 3)) // Returns [[1, 2], [3, 4], [5, 6]]
+    /// print(array.chunked(into: 3)) // Returns [[1, 2, 3], [4, 5, 6]]
+    /// print(array.chunked(into: 2)) // Returns [[1, 2], [3, 4], [5, 6]]
     ///
     /// ```
     func chunked(into size: Int) -> [[Element]] {
