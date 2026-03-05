@@ -11,6 +11,7 @@ public extension Color {
     ///
     /// print(hex) // Returns "#A020F0"
     /// ```
+    @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     var hex: String {
         guard let components = NativeColor(self).cgColor.components else {
             assertionFailure("Color has no components — unexpected color space.")
@@ -37,6 +38,7 @@ public extension Color {
     /// Text("Grape juice")
     ///     .foregroundStyle(purple)
     /// ```
+    @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     init?(hex: String) {
         var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         formattedHex = formattedHex.replacingOccurrences(of: "#", with: "")
@@ -72,6 +74,7 @@ public extension UIColor {
     ///
     /// print(hex) // Returns "#A020F0FF"
     /// ```
+    @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     var hex: String {
         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB),
               let rgbaColor = self.cgColor.converted(to: colorSpace, intent: .defaultIntent, options: nil),
@@ -101,6 +104,7 @@ public extension UIColor {
     /// Text("Grape juice")
     ///     .foregroundStyle(purple)
     /// ```
+    @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     convenience init?(hex: String, alpha: CGFloat = 1.0) {
         var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         formattedHex = formattedHex.replacingOccurrences(of: "#", with: "")
@@ -126,6 +130,7 @@ public extension UIColor {
     }
     
     /// Returns the SwiftUI equivalent of the color.
+    @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     var color: Color {
         var rVal: CGFloat = 0
         var bVal: CGFloat = 0
