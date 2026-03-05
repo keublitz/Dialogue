@@ -40,7 +40,7 @@ public extension Color {
     /// ```
     @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     init?(deprecated_hex: String) {
-        var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        var formattedHex = deprecated_hex.trimmingCharacters(in: .whitespacesAndNewlines)
         formattedHex = formattedHex.replacingOccurrences(of: "#", with: "")
         
         var rgb: UInt64 = 0
@@ -106,7 +106,7 @@ public extension UIColor {
     /// ```
     @available(*, deprecated, message: "This extension has been moved to the [JunkDrawer](https://github.com/keublitz/JunkDrawer) package, which includes this extension as part of a codable color class. Please migrate to this package.")
     convenience init?(deprecated_hex: String, alpha: CGFloat = 1.0) {
-        var formattedHex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        var formattedHex = deprecated_hex.trimmingCharacters(in: .whitespacesAndNewlines)
         formattedHex = formattedHex.replacingOccurrences(of: "#", with: "")
         
         var rgb: UInt64 = 0
