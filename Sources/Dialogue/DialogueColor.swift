@@ -1,6 +1,9 @@
 import Foundation
 import SwiftUI
 
+#if os(macOS)
+@available(macOS 11.0, *)
+#endif
 public extension Color {
     /// Returns the hexadecimal value of a color.
     ///
@@ -64,6 +67,7 @@ public extension Color {
     }
 }
 
+#if os(iOS)
 public extension UIColor {
     /// Returns the hexadecimal value of a color.
     ///
@@ -236,3 +240,5 @@ public func middleColor(
     
     return Color(red: r, green: g, blue: b)
 }
+#endif
+

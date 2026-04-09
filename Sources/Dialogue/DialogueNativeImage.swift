@@ -11,6 +11,7 @@ public enum CropDirection {
 
 public extension NativeImage {
     /// Adds a radial blur to an image.
+    #if os(iOS)
     func blurred(_ radius: Double = 15.0) -> NativeImage {
         let context = CIContext()
         let filter = CIFilter.gaussianBlur()
@@ -22,12 +23,14 @@ public extension NativeImage {
         
         return NativeImage(cgImage: cgImage)
     }
+    #endif
     
     /// Adds a pixelated filter an image.
     func pixelate(_ scale: Int = 16) -> NativeImage {
         return self
     }
     
+    #if os(iOS)
     /// Crops an image from a given direction.
     func crop(from direction: CropDirection, _ fraction: CGFloat = 0.5) -> NativeImage {
         switch direction {
@@ -117,4 +120,5 @@ public extension NativeImage {
         
         return NativeImage(cgImage: croppedCGImage, scale: scale, orientation: imageOrientation)
     }
+    #endif
 }
