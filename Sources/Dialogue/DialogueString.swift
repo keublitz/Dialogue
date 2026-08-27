@@ -43,7 +43,7 @@ public extension String {
     /// print(songNames.sorted{ $0.neutral < $1.neutral })
     /// // Returns ["Apple of My Eye", "The Best of the Best", "8 Years Ago", "Èl Camino", "untitled", "Zebra Pattern"]
     /// ```
-    func neutral(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
+    func neutral(keepArticles: Bool = false, alphabetizeNumerals: Bool = false) -> String {
         return self.neutralModifiers(keepArticles: keepArticles, alphabetizeNumerals: alphabetizeNumerals)
     }
     
@@ -61,7 +61,7 @@ public extension String {
         return self
     }
     
-    private func neutralModifiers(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
+    private func neutralModifiers(keepArticles: Bool = false, alphabetizeNumerals: Bool = false) -> String {
         var str = self
         
         if !keepArticles {
