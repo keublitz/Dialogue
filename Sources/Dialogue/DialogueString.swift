@@ -43,7 +43,7 @@ public extension String {
     /// print(songNames.sorted{ $0.neutral < $1.neutral })
     /// // Returns ["Apple of My Eye", "The Best of the Best", "8 Years Ago", "Èl Camino", "untitled", "Zebra Pattern"]
     /// ```
-    func neutral(keepArticles: Bool = false, alphabetizeNumerals: Bool = false) -> String {
+    func neutral(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
         return self.neutralModifiers(keepArticles: keepArticles, alphabetizeNumerals: alphabetizeNumerals)
     }
     
@@ -61,7 +61,9 @@ public extension String {
         return self
     }
     
-    private func neutralModifiers(keepArticles: Bool = false, alphabetizeNumerals: Bool = false) -> String {
+    private static let regex = try! NSRegularExpression(pattern: #"\d+"#, options: [])
+    
+    private func neutralModifiers(keepArticles: Bool = false, alphabetizeNumerals: Bool = true) -> String {
         var str = self
         
         if !keepArticles {
@@ -78,10 +80,7 @@ public extension String {
         let mutStr = NSMutableString(string: str)
         
         if alphabetizeNumerals {
-            let pattern = #"\d+"#
-            guard let regex = try? NSRegularExpression(pattern: pattern) else { return str }
-            
-            let matches = regex.matches(in: str, range: NSRange(location: 0, length: str.utf16.count))
+            let matches = Self.regex.matches(in: str, range: NSRange(location: 0, length: str.utf16.count))
             
             for match in matches.reversed() {
                 let matchString = (str as NSString).substring(with: match.range)
